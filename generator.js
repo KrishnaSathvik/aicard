@@ -344,8 +344,8 @@ export function generateHTML({ title, timeframe, username, theme, tools, metrics
     '',
     hdrSub,
     '',
-    'Generated with aiusage',
-    'github.com/KrishnaSathvik/aiusage',
+    'Generated with stackpulse',
+    'github.com/KrishnaSathvik/stackpulse',
   ].join('\n');
   const shareUrl  = 'https://twitter.com/intent/tweet?text=' + encodeURIComponent(shareLines);
   const safeTitle = title.replace(/[^a-z0-9]/gi, '-').toLowerCase();
@@ -361,7 +361,7 @@ export function generateHTML({ title, timeframe, username, theme, tools, metrics
   + '<meta name="viewport" content="width=device-width,initial-scale=1"/>\n'
   + '<title>' + title + '</title>\n'
   + '<meta property="og:title" content="' + title + '"/>\n'
-  + '<meta property="og:description" content="' + hdrSub + ' \u00b7 Generated with aiusage"/>\n'
+  + '<meta property="og:description" content="' + hdrSub + ' \u00b7 Generated with stackpulse"/>\n'
   + '<meta name="twitter:card" content="summary_large_image"/>\n'
   + '<meta name="twitter:title" content="' + title + '"/>\n'
   + '<meta name="twitter:description" content="' + hdrSub + '"/>\n'
@@ -487,7 +487,7 @@ export function generateHTML({ title, timeframe, username, theme, tools, metrics
   + '  </div>\n'
   + (heatmapHtml ? heatmapHtml + '\n' : '')
   + '  <div class="footer">\n'
-  + '    <span class="ft-l">aiusage \u00b7 github.com/KrishnaSathvik/aiusage</span>\n'
+  + '    <span class="ft-l">stackpulse \u00b7 github.com/KrishnaSathvik/stackpulse</span>\n'
   + '    <div class="ft-actions">\n'
   + '      <button class="ft-btn" onclick="printCard()">\u2391 Save as PDF</button>\n'
   + '      <a class="ft-btn ft-share" href="' + shareUrl + '" target="_blank" rel="noopener">\u2717 Share on X</a>\n'

@@ -1,16 +1,16 @@
 <p align="center">
-  <img src="https://raw.githubusercontent.com/KrishnaSathvik/aiusage/main/assets/banner.png" alt="aiusage" width="600"/>
+  <img src="https://raw.githubusercontent.com/KrishnaSathvik/stackpulse/main/assets/banner.png" alt="stackpulse" width="600"/>
 </p>
 
-<h1 align="center">aiusage</h1>
+<h1 align="center">stackpulse</h1>
 
 <p align="center">
   <strong>Generate beautiful, shareable cards for your AI coding tool usage</strong>
 </p>
 
 <p align="center">
-  <a href="https://www.npmjs.com/package/aiusage"><img src="https://img.shields.io/npm/v/aicard?color=10A37F&label=npm" alt="npm version"/></a>
-  <a href="https://github.com/KrishnaSathvik/aiusage/blob/main/LICENSE"><img src="https://img.shields.io/npm/l/aicard?color=D97706" alt="license"/></a>
+  <a href="https://www.npmjs.com/package/stackpulse"><img src="https://img.shields.io/npm/v/stackpulse?color=10A37F&label=npm" alt="npm version"/></a>
+  <a href="https://github.com/KrishnaSathvik/stackpulse/blob/main/LICENSE"><img src="https://img.shields.io/npm/l/stackpulse?color=D97706" alt="license"/></a>
   <img src="https://img.shields.io/badge/tools-13%20supported-6E56CF" alt="tools"/>
   <img src="https://img.shields.io/badge/node-%3E%3D18-333" alt="node"/>
 </p>
@@ -25,9 +25,9 @@
 
 ---
 
-## What is aiusage?
+## What is stackpulse?
 
-**aiusage** scans your machine for AI coding tools, reads their local usage data (sessions, tokens, cost), and generates a shareable HTML card with:
+**stackpulse** scans your machine for AI coding tools, reads their local usage data (sessions, tokens, cost), and generates a shareable HTML card with:
 
 - Per-tool usage breakdown with model details
 - Donut chart with smart metric selection
@@ -37,11 +37,11 @@
 One command. No API keys. No data leaves your machine.
 
 ```bash
-npx aiusage
+npx stackpulse
 ```
 
 <p align="center">
-  <img src="https://raw.githubusercontent.com/KrishnaSathvik/aiusage/main/assets/card-dark.png" alt="aiusage dark theme" width="700"/>
+  <img src="https://raw.githubusercontent.com/KrishnaSathvik/stackpulse/main/assets/card-dark.png" alt="stackpulse dark theme" width="700"/>
 </p>
 
 ---
@@ -50,11 +50,11 @@ npx aiusage
 
 ```bash
 # Run directly (no install needed)
-npx aiusage
+npx stackpulse
 
 # Or install globally
-npm install -g aiusage
-aicard
+npm install -g stackpulse
+stackpulse
 ```
 
 The interactive wizard walks you through 3 steps:
@@ -63,13 +63,13 @@ The interactive wizard walks you through 3 steps:
 2. **Choose metrics** — sessions, tokens, cost, commits, lines written
 3. **Customize** — title, handle, theme, output filename
 
-Output: `aiusage.html` (open in browser, click "Save as PNG")
+Output: `stackpulse.html` (open in browser, click "Save as PNG")
 
 ---
 
 ## Supported Tools
 
-aiusage supports **13 AI coding tools** across 4 data source types:
+stackpulse supports **13 AI coding tools** across 4 data source types:
 
 ### Full data (sessions + tokens + cost + heatmap)
 
@@ -123,7 +123,7 @@ Tools not installed on your machine can still be added manually during the wizar
 | `neon` | Pink synthwave |
 
 ```bash
-aiusage --theme cosmic
+stackpulse --theme cosmic
 ```
 
 ---
@@ -134,10 +134,10 @@ Skip the wizard entirely with a YAML or JSON config:
 
 ```bash
 # Generate a starter config
-aiusage --init ai-usage.yaml
+stackpulse --init ai-usage.yaml
 
 # Run from config
-aiusage --config ai-usage.yaml
+stackpulse --config ai-usage.yaml
 ```
 
 Example `ai-usage.yaml`:
@@ -172,12 +172,12 @@ tools:
 ## CLI Options
 
 ```
-Usage: aiusage [options]
+Usage: stackpulse [options]
 
 Options:
   -V, --version          output version number
   -c, --config <file>    load from YAML or JSON config file
-  -o, --output <name>    output base filename (default: "aicard")
+  -o, --output <name>    output base filename (default: "stackpulse")
   --no-png               skip PNG export prompt
   --theme <theme>        override theme (dark|light|cosmic|forge|arctic|verdant|neon)
   --title <title>        override card title
@@ -191,7 +191,7 @@ Options:
 
 ## How It Works
 
-aiusage reads **only local data** — nothing is sent to any server.
+stackpulse reads **only local data** — nothing is sent to any server.
 
 ```
 ┌─────────────────────────────────────────────────────┐
@@ -207,7 +207,7 @@ aiusage reads **only local data** — nothing is sent to any server.
 │         ↓ all local ↓                                │
 │                                                      │
 │  ┌─────────────────────────────────────────────┐     │
-│  │              aiusage.html                     │     │
+│  │              stackpulse.html                     │     │
 │  │  ┌─────┬──────────────────────────────┐     │     │
 │  │  │Donut│  Tool table with bars        │     │     │
 │  │  │chart│  + model breakdown           │     │     │
@@ -242,7 +242,7 @@ The generated HTML card includes built-in export buttons:
 
 ## Privacy
 
-aiusage is fully offline. It:
+stackpulse is fully offline. It:
 
 - Reads only local files on your machine
 - Never sends data to any server
@@ -260,8 +260,8 @@ Contributions welcome! Especially:
 - **Bug reports** — especially from tools with untested data formats
 
 ```bash
-git clone https://github.com/KrishnaSathvik/aiusage.git
-cd aicard
+git clone https://github.com/KrishnaSathvik/stackpulse.git
+cd stackpulse
 npm install
 node index.js
 ```
@@ -276,6 +276,6 @@ MIT © [Krishna Sathvik Mantripragada](https://github.com/KrishnaSathvik)
 
 <p align="center">
   Built by <a href="https://x.com/latentengineer_">@latentengineer_</a> · 
-  <a href="https://github.com/KrishnaSathvik/aiusage">GitHub</a> · 
-  <a href="https://www.npmjs.com/package/aiusage">npm</a>
+  <a href="https://github.com/KrishnaSathvik/stackpulse">GitHub</a> · 
+  <a href="https://www.npmjs.com/package/stackpulse">npm</a>
 </p>

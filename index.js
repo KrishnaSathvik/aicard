@@ -197,17 +197,17 @@ function buildShareLink(cardData) {
     '',
     summaryParts.join(' \u00b7 '),
     '',
-    'Generated with aicard',
-    'github.com/KrishnaSathvik/aiusage',
+    'Generated with stackpulse',
+    'github.com/KrishnaSathvik/stackpulse',
   ].join('\n');
   return `https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}`;
 }
 
 function printBanner() {
   process.stdout.write('\x1Bc'); // reset terminal cleanly
-  console.log(chalk.cyan(figlet.textSync('aiusage', { font: 'Slant' })));
-  console.log(chalk.dim('  aiusage v3.2.0  \u00b7  Shareable card for your AI coding stack'));
-  console.log(chalk.dim('  ' + AI_TOOLS.length + ' tools supported  \u00b7  github.com/KrishnaSathvik/aiusage\n'));
+  console.log(chalk.cyan(figlet.textSync('stackpulse', { font: 'Slant' })));
+  console.log(chalk.dim('  stackpulse v3.2.0  \u00b7  Shareable card for your AI coding stack'));
+  console.log(chalk.dim('  ' + AI_TOOLS.length + ' tools supported  \u00b7  github.com/KrishnaSathvik/stackpulse\n'));
 }
 
 function loadConfig(filePath) {
@@ -234,7 +234,7 @@ function runFromConfig(configPath, opts) {
       tools:     toolData,
       metrics:   mets.map(k => METRICS.find(m => m.key === k)).filter(Boolean),
     },
-    outputBase: opts.output || 'aiusage',
+    outputBase: opts.output || 'stackpulse',
   };
 }
 
@@ -254,7 +254,7 @@ function scaffoldConfig(outPath) {
   const ext = path.extname(outPath).toLowerCase();
   fs.writeFileSync(outPath, ext.startsWith('.y') ? yaml.dump(tmpl, { indent: 2 }) : JSON.stringify(tmpl, null, 2), 'utf-8');
   console.log(chalk.green(`\n  \u2726 Scaffold created \u2192 ${outPath}`));
-  console.log(chalk.dim(`  Edit values then run: aiusage --config ${outPath}\n`));
+  console.log(chalk.dim(`  Edit values then run: stackpulse --config ${outPath}\n`));
 }
 
 async function writeOutputs({ cardData, outputBase }) {
@@ -492,7 +492,7 @@ async function runWizard(opts = {}) {
   console.log('');
   const outputBase  = (await input({
     message: 'Output filename (no extension):',
-    default: opts.output || 'aiusage',
+    default: opts.output || 'stackpulse',
   })).replace(/\.(html?)$/i, '');
 
   // ── Generate ──────────────────────────────────────────────────────────────
@@ -581,11 +581,11 @@ async function runWizard(opts = {}) {
 // ─── CLI ──────────────────────────────────────────────────────────────────────
 const program = new Command();
 program
-  .name('aiusage')
+  .name('stackpulse')
   .description('Generate a shareable card for your AI coding tool stack')
   .version('3.2.0')
   .option('-c, --config <file>', 'Load from YAML or JSON config file')
-  .option('-o, --output <n>',    'Output base filename (no extension)', 'aiusage')
+  .option('-o, --output <n>',    'Output base filename (no extension)', 'stackpulse')
   .option('--theme <theme>',     'Override theme')
   .option('--title <title>',     'Override card title')
   .option('--timeframe <range>', 'Override timeframe')

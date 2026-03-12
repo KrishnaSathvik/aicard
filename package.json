@@ -1,11 +1,11 @@
 {
-  "name": "aiusage",
+  "name": "stackpulse",
   "version": "3.2.0",
   "description": "Generate beautiful shareable cards for your AI coding tool usage — Claude Code, Codex, Cursor, Gemini CLI, Aider, and 9 more",
   "main": "index.js",
   "type": "module",
   "bin": {
-    "aiusage": "./index.js"
+    "stackpulse": "./index.js"
   },
   "files": [
     "index.js",
@@ -21,11 +21,11 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/KrishnaSathvik/aiusage.git"
+    "url": "git+https://github.com/KrishnaSathvik/stackpulse.git"
   },
-  "homepage": "https://github.com/KrishnaSathvik/aiusage#readme",
+  "homepage": "https://github.com/KrishnaSathvik/stackpulse#readme",
   "bugs": {
-    "url": "https://github.com/KrishnaSathvik/aiusage/issues"
+    "url": "https://github.com/KrishnaSathvik/stackpulse/issues"
   },
   "keywords": [
     "ai",
