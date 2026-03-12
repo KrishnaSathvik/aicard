@@ -3,7 +3,7 @@
 ## 3.2.0 (2026-03-12)
 
 ### Features
-- Renamed project to **aicard** (`npx aicard`)
+- Renamed project to **aiusage** (`npx aicard`)
 - Smart donut chart — auto-picks the most balanced metric instead of always using sessions
 - Precise session counts — shows exact numbers with commas (1,971 not 2.0k)
 - Better Share on X — lists each tool with individual stats

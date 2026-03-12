@@ -198,32 +198,16 @@ function buildShareLink(cardData) {
     summaryParts.join(' \u00b7 '),
     '',
     'Generated with aicard',
-    'github.com/KrishnaSathvik/aicard',
+    'github.com/KrishnaSathvik/aiusage',
   ].join('\n');
   return `https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}`;
 }
 
-function hasPngTool() {
-  try { execSync('which wkhtmltoimage', { stdio: 'ignore' }); return true; } catch { return false; }
-}
-
-function exportPNG(htmlPath, pngPath) {
-  try {
-    execSync(
-      `wkhtmltoimage --width 900 --quality 95 --zoom 2 --disable-smart-width ` +
-      `--load-error-handling ignore --load-media-error-handling ignore ` +
-      `"${htmlPath}" "${pngPath}" 2>/dev/null`,
-      { timeout: 30000 }
-    );
-  } catch {}
-  return fs.existsSync(pngPath) && fs.statSync(pngPath).size > 10000;
-}
-
 function printBanner() {
-  console.clear();
-  console.log(chalk.cyan(figlet.textSync('aicard', { font: 'Slant' })));
-  console.log(chalk.dim('  aicard v3.2.0  \u00b7  Shareable card for your AI coding stack'));
-  console.log(chalk.dim('  ' + AI_TOOLS.length + ' tools supported  \u00b7  github.com/KrishnaSathvik/aicard\n'));
+  process.stdout.write('\x1Bc'); // reset terminal cleanly
+  console.log(chalk.cyan(figlet.textSync('aiusage', { font: 'Slant' })));
+  console.log(chalk.dim('  aiusage v3.2.0  \u00b7  Shareable card for your AI coding stack'));
+  console.log(chalk.dim('  ' + AI_TOOLS.length + ' tools supported  \u00b7  github.com/KrishnaSathvik/aiusage\n'));
 }
 
 function loadConfig(filePath) {
@@ -250,8 +234,7 @@ function runFromConfig(configPath, opts) {
       tools:     toolData,
       metrics:   mets.map(k => METRICS.find(m => m.key === k)).filter(Boolean),
     },
-    outputBase: opts.output || 'aicard',
-    exportPng:  opts.png !== false,
+    outputBase: opts.output || 'aiusage',
   };
 }
 
@@ -271,24 +254,15 @@ function scaffoldConfig(outPath) {
   const ext = path.extname(outPath).toLowerCase();
   fs.writeFileSync(outPath, ext.startsWith('.y') ? yaml.dump(tmpl, { indent: 2 }) : JSON.stringify(tmpl, null, 2), 'utf-8');
   console.log(chalk.green(`\n  \u2726 Scaffold created \u2192 ${outPath}`));
-  console.log(chalk.dim(`  Edit values then run: aicard --config ${outPath}\n`));
+  console.log(chalk.dim(`  Edit values then run: aiusage --config ${outPath}\n`));
 }
 
-async function writeOutputs({ cardData, outputBase, exportPng }) {
+async function writeOutputs({ cardData, outputBase }) {
   const htmlPath = path.resolve(`${outputBase}.html`);
-  const pngPath  = path.resolve(`${outputBase}.png`);
 
   const spinner = ora({ text: 'Rendering card\u2026', color: 'cyan' }).start();
   fs.writeFileSync(htmlPath, generateHTML(cardData), 'utf-8');
-
-  if (exportPng) {
-    spinner.text = 'Exporting PNG\u2026';
-    exportPNG(htmlPath, pngPath)
-      ? spinner.succeed(chalk.green('Card ready!'))
-      : spinner.warn(chalk.yellow('HTML saved. For PNG: brew install wkhtmltopdf  then re-run.'));
-  } else {
-    spinner.succeed(chalk.green('Card ready!'));
-  }
+  spinner.succeed(chalk.green('Card ready!'));
 
   // Result summary
   console.log('');
@@ -313,9 +287,6 @@ async function writeOutputs({ cardData, outputBase, exportPng }) {
   console.log('');
   console.log(chalk.dim('\u2500'.repeat(W)));
   console.log(chalk.green('  HTML  ') + chalk.underline(htmlPath));
-  if (exportPng && fs.existsSync(pngPath)) {
-    console.log(chalk.green('  PNG   ') + chalk.underline(pngPath));
-  }
   console.log(chalk.dim('\u2500'.repeat(W)));
   console.log('');
   console.log('  ' + chalk.bold('Share \u2192') + ' ' + chalk.blue.underline(buildShareLink(cardData)));
@@ -521,15 +492,8 @@ async function runWizard(opts = {}) {
   console.log('');
   const outputBase  = (await input({
     message: 'Output filename (no extension):',
-    default: opts.output || 'aicard',
-  })).replace(/\.(html?|png)$/i, '');
-
-  let doExportPng = false;
-  if (hasPngTool()) {
-    doExportPng = await confirm({ message: 'Export PNG as well?', default: true });
-  } else {
-    console.log(chalk.dim('  \u2139  PNG export: open the HTML and click "Save as PNG" (or install wkhtmltopdf for CLI export)'));
-  }
+    default: opts.output || 'aiusage',
+  })).replace(/\.(html?)$/i, '');
 
   // ── Generate ──────────────────────────────────────────────────────────────
   console.log(chalk.green('\n  \u2714  All done \u2014 generating your card\u2026\n'));
@@ -611,19 +575,17 @@ async function runWizard(opts = {}) {
       heatmapData,
     },
     outputBase,
-    exportPng: doExportPng,
   };
 }
 
 // ─── CLI ──────────────────────────────────────────────────────────────────────
 const program = new Command();
 program
-  .name('aicard')
+  .name('aiusage')
   .description('Generate a shareable card for your AI coding tool stack')
   .version('3.2.0')
   .option('-c, --config <file>', 'Load from YAML or JSON config file')
-  .option('-o, --output <n>',    'Output base filename (no extension)', 'aicard')
-  .option('--no-png',            'Skip PNG export')
+  .option('-o, --output <n>',    'Output base filename (no extension)', 'aiusage')
   .option('--theme <theme>',     'Override theme')
   .option('--title <title>',     'Override card title')
   .option('--timeframe <range>', 'Override timeframe')
@@ -642,6 +604,6 @@ const opts = program.opts();
   const result = opts.config
     ? (console.log(chalk.dim(`  Loading config: ${opts.config}\n`)), runFromConfig(opts.config, opts))
     : await runWizard({ title: opts.title, timeframe: opts.timeframe, username: opts.username,
-        theme: opts.theme, output: opts.output, png: opts.png });
+        theme: opts.theme, output: opts.output });
   await writeOutputs(result);
 })();
