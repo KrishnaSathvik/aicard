@@ -1,6 +1,6 @@
 {
   "name": "stackpulse",
-  "version": "3.2.2",
+  "version": "3.2.3",
   "description": "Generate beautiful shareable cards for your AI coding tool usage — Claude Code, Codex, Cursor, Gemini CLI, Aider, and 9 more",
   "main": "index.js",
   "type": "module",
