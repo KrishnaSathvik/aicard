@@ -1,0 +1,20 @@
+node_modules/
+*.tgz
+*.html
+*.png
+.DS_Store
+Thumbs.db
+
+# Output files
+aicard.html
+aicard.png
+
+# Config files (user-specific)
+ai-usage.yaml
+ai-usage.json
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
