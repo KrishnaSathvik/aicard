@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="https://raw.githubusercontent.com/KrishnaSathvik/stackpulse/main/assets/banner.png" alt="stackpulse" width="600"/>
+  <img src="https://raw.githubusercontent.com/KrishnaSathvik/stackpulse/master/assets/banner.png" alt="stackpulse" width="600"/>
 </p>
 
 <h1 align="center">stackpulse</h1>
@@ -41,7 +41,7 @@ npx stackpulse
 ```
 
 <p align="center">
-  <img src="https://raw.githubusercontent.com/KrishnaSathvik/stackpulse/main/assets/card-dark.png" alt="stackpulse dark theme" width="700"/>
+  <img src="https://raw.githubusercontent.com/KrishnaSathvik/stackpulse/master/assets/card-dark.png" alt="stackpulse dark theme" width="700"/>
 </p>
 
 ---
