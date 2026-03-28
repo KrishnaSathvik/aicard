@@ -1,4 +1,18 @@
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
+
+function useIsMobile(breakpoint = 640) {
+  const [isMobile, setIsMobile] = useState(() =>
+    typeof window !== "undefined" ? window.innerWidth < breakpoint : false
+  );
+  useEffect(() => {
+    const mql = window.matchMedia(`(max-width: ${breakpoint - 1}px)`);
+    const handler = (e) => setIsMobile(e.matches);
+    mql.addEventListener("change", handler);
+    setIsMobile(mql.matches);
+    return () => mql.removeEventListener("change", handler);
+  }, [breakpoint]);
+  return isMobile;
+}
 
 const THEMES = [
   { name: "Dark", bg: "#0f0f0f", cell: "#1e1e1e", on: "#22d3ee", text: "#e2e8f0", vibe: "Terminal noir" },
@@ -86,6 +100,7 @@ function MiniHeatmap({ cellBg, onBg }) {
 }
 
 export default function StackPulseLanding() {
+  const mobile = useIsMobile();
   const [heatmap] = useState(generateHeatmap);
   const [copied, setCopied] = useState(false);
   const [copiedBottom, setCopiedBottom] = useState(false);
@@ -97,19 +112,19 @@ export default function StackPulseLanding() {
   };
 
   const s = {
-    page: { background: "#0a0a0b", color: "#fafafa", fontFamily: "'Outfit', system-ui, sans-serif", minHeight: "100vh", lineHeight: 1.6, WebkitFontSmoothing: "antialiased" },
+    page: { background: "#0a0a0b", color: "#fafafa", fontFamily: "'Outfit', system-ui, sans-serif", minHeight: "100vh", lineHeight: 1.6, WebkitFontSmoothing: "antialiased", overflowX: "hidden" },
     mono: { fontFamily: "'JetBrains Mono', 'SF Mono', 'Fira Code', monospace" },
     muted: { color: "#a1a1aa" },
     dim: { color: "#71717a" },
     accent: "#22d3ee",
-    section: { maxWidth: 900, margin: "0 auto", padding: "80px 24px" },
+    section: { maxWidth: 900, margin: "0 auto", padding: mobile ? "48px 16px" : "80px 24px" },
   };
 
   return (
     <div style={s.page}>
 
       {/* NAV */}
-      <nav style={{ position: "sticky", top: 0, zIndex: 100, padding: "14px 24px", display: "flex", alignItems: "center", justifyContent: "space-between", background: "rgba(10,10,11,0.85)", backdropFilter: "blur(16px)", borderBottom: "1px solid #27272a" }}>
+      <nav style={{ position: "sticky", top: 0, zIndex: 100, padding: mobile ? "12px 16px" : "14px 24px", display: "flex", alignItems: "center", justifyContent: "space-between", background: "rgba(10,10,11,0.85)", backdropFilter: "blur(16px)", borderBottom: "1px solid #27272a" }}>
         <div style={{ ...s.mono, fontWeight: 700, fontSize: 17, display: "flex", alignItems: "center", gap: 8 }}>
           <span style={{ width: 8, height: 8, background: s.accent, borderRadius: "50%", boxShadow: `0 0 8px ${s.accent}` }} />
           stackpulse
@@ -123,8 +138,8 @@ export default function StackPulseLanding() {
       </nav>
 
       {/* HERO */}
-      <section style={{ minHeight: "90vh", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", padding: "100px 24px 60px", textAlign: "center", position: "relative" }}>
-        <div style={{ position: "absolute", top: 0, left: "50%", transform: "translateX(-50%)", width: 800, height: 600, background: "radial-gradient(ellipse at center, rgba(34,211,238,0.06) 0%, transparent 70%)", pointerEvents: "none" }} />
+      <section style={{ minHeight: mobile ? "auto" : "90vh", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", padding: mobile ? "60px 16px 40px" : "100px 24px 60px", textAlign: "center", position: "relative" }}>
+        <div style={{ position: "absolute", top: 0, left: "50%", transform: "translateX(-50%)", width: "100%", maxWidth: 800, height: 600, background: "radial-gradient(ellipse at center, rgba(34,211,238,0.06) 0%, transparent 70%)", pointerEvents: "none" }} />
 
         <div style={{ ...s.mono, fontSize: 12, color: s.accent, background: "rgba(34,211,238,0.1)", border: "1px solid rgba(34,211,238,0.2)", padding: "6px 16px", borderRadius: 100, marginBottom: 32, display: "inline-flex", alignItems: "center", gap: 8 }}>
           <span style={{ width: 6, height: 6, background: s.accent, borderRadius: "50%" }} />
@@ -141,11 +156,11 @@ export default function StackPulseLanding() {
           Scans your machine for AI coding tools, reads local usage data, and generates a shareable HTML card with donut chart, per-tool heatmap, and export to PNG, PDF, or X.
         </p>
 
-        <div onClick={() => handleCopy("top")} style={{ background: "#111113", border: `1px solid ${copied ? s.accent : "#27272a"}`, borderRadius: 12, padding: "16px 28px", ...s.mono, fontSize: 16, display: "inline-flex", alignItems: "center", gap: 16, cursor: "pointer", transition: "all 0.2s", boxShadow: copied ? `0 0 20px rgba(34,211,238,0.1)` : "none" }}>
+        <div onClick={() => handleCopy("top")} style={{ background: "#111113", border: `1px solid ${copied ? s.accent : "#27272a"}`, borderRadius: 12, padding: mobile ? "12px 18px" : "16px 28px", ...s.mono, fontSize: mobile ? 14 : 16, display: "inline-flex", alignItems: "center", gap: mobile ? 10 : 16, cursor: "pointer", transition: "all 0.2s", boxShadow: copied ? `0 0 20px rgba(34,211,238,0.1)` : "none", maxWidth: "100%" }}>
           <span style={{ color: s.accent }}>$</span>
           <span>npx stackpulse</span>
-          <span style={{ fontSize: 11, color: copied ? "#34d399" : "#71717a", background: copied ? "rgba(52,211,153,0.1)" : "#18181b", padding: "4px 10px", borderRadius: 4 }}>
-            {copied ? "✓ copied" : "click to copy"}
+          <span style={{ fontSize: 11, color: copied ? "#34d399" : "#71717a", background: copied ? "rgba(52,211,153,0.1)" : "#18181b", padding: "4px 10px", borderRadius: 4, whiteSpace: "nowrap" }}>
+            {copied ? "✓ copied" : "copy"}
           </span>
         </div>
 
@@ -165,7 +180,7 @@ export default function StackPulseLanding() {
         <h2 style={{ fontSize: "clamp(28px, 4vw, 40px)", fontWeight: 700, letterSpacing: -1.5, marginBottom: 12 }}>A card that tells the whole story</h2>
         <p style={{ color: "#a1a1aa", fontSize: 16, maxWidth: 540, marginBottom: 48 }}>Per-tool usage breakdown with model details, donut chart with smart metric selection, GitHub-style activity heatmap with per-tool rows. Save as PNG, PDF, or share on X — all from the card.</p>
 
-        <div style={{ background: "#111113", border: "1px solid #27272a", borderRadius: 16, padding: 32, position: "relative", overflow: "hidden" }}>
+        <div style={{ background: "#111113", border: "1px solid #27272a", borderRadius: mobile ? 12 : 16, padding: mobile ? 16 : 32, position: "relative", overflow: "hidden" }}>
           <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: 1, background: "linear-gradient(90deg, transparent, #22d3ee, transparent)", opacity: 0.3 }} />
 
           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 24 }}>
@@ -177,11 +192,11 @@ export default function StackPulseLanding() {
           </div>
 
           {/* Heatmap Grid */}
-          <div style={{ display: "flex", gap: 3, marginBottom: 24, overflowX: "auto", paddingBottom: 8 }}>
+          <div style={{ display: "flex", gap: mobile ? 2 : 3, marginBottom: 24, overflowX: "auto", paddingBottom: 8 }}>
             {heatmap.map((week, wi) => (
-              <div key={wi} style={{ display: "flex", flexDirection: "column", gap: 3 }}>
+              <div key={wi} style={{ display: "flex", flexDirection: "column", gap: mobile ? 2 : 3 }}>
                 {week.map((level, di) => (
-                  <div key={di} style={{ width: 12, height: 12, borderRadius: 2, background: greens[level], transition: "transform 0.15s" }}
+                  <div key={di} style={{ width: mobile ? 10 : 12, height: mobile ? 10 : 12, borderRadius: 2, background: greens[level], transition: "transform 0.15s" }}
                     onMouseEnter={e => e.target.style.transform = "scale(1.4)"}
                     onMouseLeave={e => e.target.style.transform = "scale(1)"} />
                 ))}
@@ -190,13 +205,13 @@ export default function StackPulseLanding() {
           </div>
 
           {/* Legend */}
-          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: 16 }}>
+          <div style={{ display: "flex", justifyContent: "space-between", alignItems: mobile ? "flex-start" : "center", flexDirection: mobile ? "column" : "row", flexWrap: "wrap", gap: mobile ? 10 : 16 }}>
             <div style={{ display: "flex", alignItems: "center", gap: 4, ...s.mono, fontSize: 11, color: "#71717a" }}>
               Less
               {greens.map((c, i) => <div key={i} style={{ width: 10, height: 10, borderRadius: 2, background: c }} />)}
               More
             </div>
-            <div style={{ display: "flex", gap: 20, ...s.mono, fontSize: 11, color: "#71717a" }}>
+            <div style={{ display: "flex", gap: mobile ? 12 : 20, ...s.mono, fontSize: mobile ? 10 : 11, color: "#71717a", flexWrap: "wrap" }}>
               <span><strong style={{ color: "#fafafa" }}>847</strong> sessions</span>
               <span><strong style={{ color: "#fafafa" }}>2.1M</strong> tokens</span>
               <span><strong style={{ color: "#fafafa" }}>$142</strong> estimated</span>
@@ -204,8 +219,8 @@ export default function StackPulseLanding() {
           </div>
 
           {/* Donut */}
-          <div style={{ display: "grid", gridTemplateColumns: "160px 1fr", gap: 32, alignItems: "center", marginTop: 32, paddingTop: 32, borderTop: "1px solid #27272a" }}>
-            <svg viewBox="0 0 160 160" style={{ width: 140, height: 140 }}>
+          <div style={{ display: "grid", gridTemplateColumns: mobile ? "1fr" : "160px 1fr", gap: mobile ? 20 : 32, alignItems: "center", justifyItems: mobile ? "center" : "start", marginTop: mobile ? 20 : 32, paddingTop: mobile ? 20 : 32, borderTop: "1px solid #27272a" }}>
+            <svg viewBox="0 0 160 160" style={{ width: mobile ? 120 : 140, height: mobile ? 120 : 140 }}>
               <circle cx="80" cy="80" r="60" fill="none" stroke="#18181b" strokeWidth="14" />
               <circle cx="80" cy="80" r="60" fill="none" stroke="#22d3ee" strokeWidth="14" strokeDasharray="150.8 226.2" strokeDashoffset="0" transform="rotate(-90 80 80)" strokeLinecap="round" />
               <circle cx="80" cy="80" r="60" fill="none" stroke="#a78bfa" strokeWidth="14" strokeDasharray="90.5 286.5" strokeDashoffset="-150.8" transform="rotate(-90 80 80)" strokeLinecap="round" />
@@ -250,7 +265,7 @@ export default function StackPulseLanding() {
               <span style={{ ...s.mono, fontSize: 13, fontWeight: 600 }}>{tier.label}</span>
               <span style={{ ...s.mono, fontSize: 11, color: "#71717a" }}>— {tier.desc}</span>
             </div>
-            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(200px, 1fr))", gap: 10 }}>
+            <div style={{ display: "grid", gridTemplateColumns: mobile ? "1fr" : "repeat(auto-fill, minmax(200px, 1fr))", gap: 10 }}>
               {tier.tools.map((t, i) => (
                 <div key={i} style={{ background: "#111113", border: "1px solid #27272a", borderRadius: 10, padding: "14px 16px", display: "flex", alignItems: "flex-start", gap: 10, transition: "all 0.2s", cursor: "default" }}
                   onMouseEnter={e => { e.currentTarget.style.borderColor = "#3f3f46"; e.currentTarget.style.transform = "translateY(-2px)"; }}
@@ -274,23 +289,23 @@ export default function StackPulseLanding() {
         <h2 style={{ fontSize: "clamp(28px, 4vw, 40px)", fontWeight: 700, letterSpacing: -1.5, marginBottom: 12 }}>Good tools exist. Different problem.</h2>
         <p style={{ color: "#a1a1aa", fontSize: 16, maxWidth: 560, marginBottom: 48 }}>ccusage, CodexBar, and caut are excellent for what they do. stackpulse fills the gap none of them cover.</p>
 
-        <div style={{ overflowX: "auto" }}>
-          <table style={{ width: "100%", borderCollapse: "collapse", ...s.mono, fontSize: 13 }}>
+        <div style={{ overflowX: "auto", WebkitOverflowScrolling: "touch", margin: mobile ? "0 -16px" : 0, padding: mobile ? "0 16px" : 0 }}>
+          <table style={{ width: "100%", minWidth: mobile ? 580 : "auto", borderCollapse: "collapse", ...s.mono, fontSize: mobile ? 11 : 13 }}>
             <thead>
               <tr>
                 {["", "ccusage", "CodexBar", "caut", "stackpulse"].map((h, i) => (
-                  <th key={i} style={{ textAlign: "left", padding: "12px 14px", color: "#71717a", fontWeight: 500, fontSize: 11, textTransform: "uppercase", letterSpacing: 1, borderBottom: "1px solid #27272a", ...(i === 4 ? { background: "rgba(34,211,238,0.04)", color: s.accent } : {}) }}>{h}</th>
+                  <th key={i} style={{ textAlign: "left", padding: mobile ? "10px 8px" : "12px 14px", color: "#71717a", fontWeight: 500, fontSize: mobile ? 9 : 11, textTransform: "uppercase", letterSpacing: 1, borderBottom: "1px solid #27272a", whiteSpace: "nowrap", ...(i === 4 ? { background: "rgba(34,211,238,0.04)", color: s.accent } : {}) }}>{h}</th>
                 ))}
               </tr>
             </thead>
             <tbody>
               {COMPARE_ROWS.map((row, i) => (
                 <tr key={i}>
-                  <td style={{ padding: "13px 14px", borderBottom: "1px solid #1f1f23", color: "#fafafa", fontWeight: 500 }}>{row.feature}</td>
-                  <td style={{ padding: "13px 14px", borderBottom: "1px solid #1f1f23", color: row.cc.startsWith("✓") ? "#22c55e" : "#71717a" }}>{row.cc}</td>
-                  <td style={{ padding: "13px 14px", borderBottom: "1px solid #1f1f23", color: row.cb.startsWith("✓") ? "#22c55e" : row.cb === "✗" ? "#71717a" : "#f97316" }}>{row.cb}</td>
-                  <td style={{ padding: "13px 14px", borderBottom: "1px solid #1f1f23", color: row.caut.startsWith("✓") ? "#22c55e" : row.caut === "✗" ? "#71717a" : "#f97316" }}>{row.caut}</td>
-                  <td style={{ padding: "13px 14px", borderBottom: "1px solid #1f1f23", background: "rgba(34,211,238,0.04)", color: row.spWin ? "#22c55e" : "#71717a", fontWeight: row.spWin ? 600 : 400 }}>{row.sp}</td>
+                  <td style={{ padding: mobile ? "10px 8px" : "13px 14px", borderBottom: "1px solid #1f1f23", color: "#fafafa", fontWeight: 500, whiteSpace: "nowrap" }}>{row.feature}</td>
+                  <td style={{ padding: mobile ? "10px 8px" : "13px 14px", borderBottom: "1px solid #1f1f23", color: row.cc.startsWith("✓") ? "#22c55e" : "#71717a" }}>{row.cc}</td>
+                  <td style={{ padding: mobile ? "10px 8px" : "13px 14px", borderBottom: "1px solid #1f1f23", color: row.cb.startsWith("✓") ? "#22c55e" : row.cb === "✗" ? "#71717a" : "#f97316" }}>{row.cb}</td>
+                  <td style={{ padding: mobile ? "10px 8px" : "13px 14px", borderBottom: "1px solid #1f1f23", color: row.caut.startsWith("✓") ? "#22c55e" : row.caut === "✗" ? "#71717a" : "#f97316" }}>{row.caut}</td>
+                  <td style={{ padding: mobile ? "10px 8px" : "13px 14px", borderBottom: "1px solid #1f1f23", background: "rgba(34,211,238,0.04)", color: row.spWin ? "#22c55e" : "#71717a", fontWeight: row.spWin ? 600 : 400 }}>{row.sp}</td>
                 </tr>
               ))}
             </tbody>
@@ -323,12 +338,12 @@ export default function StackPulseLanding() {
       </section>
 
       {/* STATS BAR */}
-      <section style={{ padding: "64px 24px", borderTop: "1px solid #27272a", borderBottom: "1px solid #27272a" }}>
-        <div style={{ maxWidth: 900, margin: "0 auto", display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: 32, textAlign: "center" }}>
+      <section style={{ padding: mobile ? "40px 16px" : "64px 24px", borderTop: "1px solid #27272a", borderBottom: "1px solid #27272a" }}>
+        <div style={{ maxWidth: 900, margin: "0 auto", display: "grid", gridTemplateColumns: mobile ? "repeat(2, 1fr)" : "repeat(4, 1fr)", gap: mobile ? 24 : 32, textAlign: "center" }}>
           {[
-            { num: "0", label: "Network Requests" },
-            { num: "0", label: "API Keys" },
-            { num: "0", label: "Telemetry" },
+            { num: "No", label: "Network Requests" },
+            { num: "No", label: "API Keys" },
+            { num: "No", label: "Telemetry" },
             { num: "100%", label: "Local" },
           ].map((stat, i) => (
             <div key={i}>
@@ -347,7 +362,7 @@ export default function StackPulseLanding() {
           Use <code style={{ ...s.mono, background: "#18181b", padding: "2px 8px", borderRadius: 4, fontSize: 14, color: s.accent }}>--theme</code> to switch.
         </p>
 
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(120px, 1fr))", gap: 12 }}>
+        <div style={{ display: "grid", gridTemplateColumns: mobile ? "repeat(auto-fill, minmax(90px, 1fr))" : "repeat(auto-fill, minmax(120px, 1fr))", gap: mobile ? 8 : 12 }}>
           {THEMES.map((t, i) => {
             const isLight = t.name === "Light" || t.name === "Arctic";
             return (
@@ -364,24 +379,24 @@ export default function StackPulseLanding() {
       </section>
 
       {/* CTA */}
-      <section style={{ padding: "120px 24px", textAlign: "center", position: "relative" }}>
-        <div style={{ position: "absolute", bottom: 0, left: "50%", transform: "translateX(-50%)", width: 800, height: 400, background: "radial-gradient(ellipse at center, rgba(34,211,238,0.05) 0%, transparent 70%)", pointerEvents: "none" }} />
+      <section style={{ padding: mobile ? "60px 16px" : "120px 24px", textAlign: "center", position: "relative" }}>
+        <div style={{ position: "absolute", bottom: 0, left: "50%", transform: "translateX(-50%)", width: "100%", maxWidth: 800, height: 400, background: "radial-gradient(ellipse at center, rgba(34,211,238,0.05) 0%, transparent 70%)", pointerEvents: "none" }} />
         <div style={{ ...s.mono, fontSize: 11, textTransform: "uppercase", letterSpacing: 2, color: s.accent, marginBottom: 12 }}>Get started</div>
         <h2 style={{ fontSize: "clamp(32px, 5vw, 52px)", fontWeight: 800, letterSpacing: -2, marginBottom: 16 }}>See your pulse.</h2>
         <p style={{ color: "#a1a1aa", fontSize: 16, marginBottom: 40 }}>One command. All your AI tools. Your machine only.</p>
 
-        <div onClick={() => handleCopy("bottom")} style={{ background: "#111113", border: `1px solid ${copiedBottom ? s.accent : "#27272a"}`, borderRadius: 12, padding: "16px 28px", ...s.mono, fontSize: 16, display: "inline-flex", alignItems: "center", gap: 16, cursor: "pointer", transition: "all 0.2s" }}>
+        <div onClick={() => handleCopy("bottom")} style={{ background: "#111113", border: `1px solid ${copiedBottom ? s.accent : "#27272a"}`, borderRadius: 12, padding: mobile ? "12px 18px" : "16px 28px", ...s.mono, fontSize: mobile ? 14 : 16, display: "inline-flex", alignItems: "center", gap: mobile ? 10 : 16, cursor: "pointer", transition: "all 0.2s", maxWidth: "100%" }}>
           <span style={{ color: s.accent }}>$</span>
           <span>npx stackpulse</span>
-          <span style={{ fontSize: 11, color: copiedBottom ? "#34d399" : "#71717a", background: copiedBottom ? "rgba(52,211,153,0.1)" : "#18181b", padding: "4px 10px", borderRadius: 4 }}>
-            {copiedBottom ? "✓ copied" : "click to copy"}
+          <span style={{ fontSize: 11, color: copiedBottom ? "#34d399" : "#71717a", background: copiedBottom ? "rgba(52,211,153,0.1)" : "#18181b", padding: "4px 10px", borderRadius: 4, whiteSpace: "nowrap" }}>
+            {copiedBottom ? "✓ copied" : "copy"}
           </span>
         </div>
       </section>
 
       {/* FOOTER */}
-      <footer style={{ padding: "40px 24px", borderTop: "1px solid #27272a" }}>
-        <div style={{ maxWidth: 900, margin: "0 auto", display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: 16 }}>
+      <footer style={{ padding: mobile ? "32px 16px" : "40px 24px", borderTop: "1px solid #27272a" }}>
+        <div style={{ maxWidth: 900, margin: "0 auto", display: "flex", flexDirection: mobile ? "column" : "row", justifyContent: "space-between", alignItems: mobile ? "center" : "center", gap: 16, textAlign: mobile ? "center" : "left" }}>
           <span style={{ ...s.mono, fontSize: 13, color: "#71717a" }}>
             stackpulse · built by <a href="https://github.com/KrishnaSathvik" target="_blank" rel="noreferrer" style={{ color: "#a1a1aa", textDecoration: "none" }}>@KrishnaSathvik</a>
           </span>
