@@ -17,7 +17,9 @@
   ],
   "scripts": {
     "start": "node index.js",
-    "prepublishOnly": "node --check index.js && node --check generator.js"
+    "prepublishOnly": "node --check index.js && node --check generator.js",
+    "dev:website": "npm run dev --prefix website",
+    "build:website": "npm run build --prefix website"
   },
   "repository": {
     "type": "git",
