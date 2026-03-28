@@ -126,7 +126,7 @@ export default function StackPulseLanding() {
       {/* NAV */}
       <nav style={{ position: "sticky", top: 0, zIndex: 100, padding: mobile ? "12px 16px" : "14px 24px", display: "flex", alignItems: "center", justifyContent: "space-between", background: "rgba(10,10,11,0.85)", backdropFilter: "blur(16px)", borderBottom: "1px solid #27272a" }}>
         <div style={{ ...s.mono, fontWeight: 700, fontSize: 17, display: "flex", alignItems: "center", gap: 8 }}>
-          <span style={{ width: 8, height: 8, background: s.accent, borderRadius: "50%", boxShadow: `0 0 8px ${s.accent}` }} />
+          <img src="/logo.png" alt="stackpulse" style={{ width: 24, height: 24, borderRadius: 4 }} />
           stackpulse
         </div>
         <div style={{ display: "flex", gap: 20, alignItems: "center" }}>
